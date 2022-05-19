@@ -36,7 +36,7 @@ The program is run through command prompt (PC) or terminal (Mac). It should be n
 5) The model window will open, select Model > Run Model
 6) The model will run (it will say so in command prompt)
 7) The figures for the ice berg(s) will be displated in the GUI
-8) When the program has finished running, the final plot will be output as a PDF into the original folder where extraction occurred in step 1 and saved to a csv file
+8) When the program has finished running, the final plot will be output as a PDF into the original folder where extraction occurred in step 1 and saved to a csv file - either output.csv for the single ice berg program ro output2.csv for the multiple ice berg program.
 
 # TESTING
 
