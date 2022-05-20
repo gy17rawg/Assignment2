@@ -3,6 +3,10 @@
 """
 Created on Wed Apr  6 14:20:45 2022
 
+'''This is the main python file to run the program to calculate just one iceberg. It pulls files from the source folder
+and writes to an export file. It creates the GUI, calculates ice presence, thickness then the volume of the iceberg.
+The output file contains the iceberg number, total mass then mass above sea level. Version 1.0. MIT Licenced''
+
 @author: rorygrindey
 """
 
@@ -54,26 +58,27 @@ def run():
 
         # print(Radar[r])
 
-        data = Radar[r]
+        data = Radar[r]  # Reads in the row of radar data
 
         # print(data)
 
-        y = r
+        y = r  # Sets y equal to the row number - not necessarily needed but useful for clarity
 
         for i in range(len(data)):  # Second loop iterates through each element of the first list (row)
 
             # print(i)
 
-            if data[i] >= 100:
-                x = i
+            if data[i] >= str(100):  # Finds if there is ice from the radar value (greaater than 100)
 
-                print(x, y)
+                x = i  # Sets x equal to the element number - not necessarily needed but useful for clarity
 
-                thickness = (Lidar[y][x]) / 10  # Gets thickness in metres at that coordinate
+                # print(x, y) - Used for testing to ensure it had the correct x and y value
 
-                print(thickness)
+                thickness = int((Lidar[y][x])) / 10  # Gets thickness in metres at that coordinate from the lidar
 
-                icemasscalc(thickness)
+                print(thickness)  # Prints the thickness value
+
+                icemasscalc(thickness)  # Calls the icemasscalc function passing in the thickness
 
     for i in range(len(Ice)):
         IceSum += Ice[i]
@@ -88,11 +93,12 @@ def run():
     IceBergVol = IceSum * 10
 
     if IceBergVol < 36000000:
-        move = True
+
+        outputtext = "Yes"
 
     else:
 
-        move = False
+        outputtext = "No"
 
     # Text = ("Total Mass of Iceberg: " + str("{:,}".format(IceBergVol)) + "kg" + "Mass of Ice above sea level: "
     # + str("{:,}".format(IceSum)) + "kg" + "Move = " + str(move))
@@ -103,7 +109,7 @@ def run():
                           height=10)
 
     Text.set("Total Mass of Iceberg: " + str("{:,}".format(IceBergVol)) + "kg" + '\n' "Mass of Ice above sea level: "
-             + str("{:,}".format(IceSum)) + "kg" + '\n' "Move = " + str(move))
+             + str("{:,}".format(IceSum)) + "kg" + '\n' "Able to be moved = " + outputtext)
 
     label.pack()
 
@@ -114,14 +120,6 @@ def run():
     output.close()
 
     print("Results Displayed")
-
-    # canvas = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(fig, master=gui)
-
-    # canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
-
-    # canvas.draw()
-
-    # canvas.pack()
 
 
 # Builds main menu window
@@ -146,7 +144,7 @@ menu_bar.add_cascade(label="Model", menu=model_menu)
 
 model_menu.add_command(label="Run Model", command=run)
 
-# Imports radar and lidar data
+# Imports radar and lidar data from csv files
 
 lidar = open("Lidar.csv")
 
@@ -188,6 +186,8 @@ fig = matplotlib.pyplot.figure(figsize=(7, 7), dpi=100)
 
 fig.canvas.set_window_title('Lidar and Radar images') # https://www.geeksforgeeks.org/how-to-display-multiple-images-in-one-figure-correctly-in-matplotlib/
 
+#  Sets up a column with 2 rows to display both radar and lidar picture
+
 rows = 2
 
 columns = 1
@@ -198,7 +198,7 @@ matplotlib.pyplot.xlim(0, len(Radar[0]))
 
 matplotlib.pyplot.ylim(0, len(Radar))
 
-matplotlib.pyplot.imshow(Radar)
+matplotlib.pyplot.imshow(Radar)  # Shows the radar plot
 
 matplotlib.pyplot.title("Radar")
 
@@ -208,7 +208,7 @@ matplotlib.pyplot.xlim(0, len(Lidar[0]))
 
 matplotlib.pyplot.ylim(0, len(Lidar))
 
-matplotlib.pyplot.imshow(Lidar)
+matplotlib.pyplot.imshow(Lidar)  # Shows the lidar plot
 
 matplotlib.pyplot.title("Lidar")
 
