@@ -71,7 +71,7 @@ def run():
 
             # print(i)
 
-            if data[i] >= str(100):  # Finds if there is ice from the radar value (greaater than 100)
+            if data[i] >= 100:  # Finds if there is ice from the radar value (greaater than 100)
 
                 x = i  # Sets x equal to the element number - not necessarily needed but useful for clarity
 
