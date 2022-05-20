@@ -40,7 +40,8 @@ writer.writerow(header)
 
 def icemasscalc(thickness):  # Function to calculate the mass of the iceberg above water for each pixel
 
-    mass = thickness * 900  ''' Mass of ice (kg) = thickness (m) x 1 x 1 (Pixel size is 1x1m) x 900 (density per m3) x 1 is redundant
+    mass = thickness * 900
+    ''' Mass of ice (kg) = thickness (m) x 1 x 1 (Pixel size is 1x1m) x 900 (density per m3) x 1 is redundant
     mass = volume (same as thickness in this case) x density'''
 
     Ice.append(mass)  # Makes a list of ice masses for each pxiel
