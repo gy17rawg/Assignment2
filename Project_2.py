@@ -38,10 +38,12 @@ writer = csv.writer(output)
 writer.writerow(header)
 
 
-def icemasscalc(thickness):
-    mass = thickness * 1 * 900
+def icemasscalc(thickness):  # Function to calculate the mass of the iceberg above water for each pixel
 
-    Ice.append(mass)
+    mass = thickness * 900  ''' Mass of ice (kg) = thickness (m) x 1 x 1 (Pixel size is 1x1m) x 900 (density per m3) x 1 is redundant
+    mass = volume (same as thickness in this case) x density'''
+
+    Ice.append(mass)  # Makes a list of ice masses for each pxiel
 
 
 def run():
@@ -90,9 +92,9 @@ def run():
 
     # https://www.tutorialspoint.com/python/tk_label.htm
 
-    IceBergVol = IceSum * 10
+    IceBergVol = IceSum * 9  # Multiples by 9 to get total mass as only 10% above water
 
-    if IceBergVol < 36000000:
+    if IceBergVol < 36000000:  # Can only be towed if mass is less than 36m kg
 
         outputtext = "Yes"
 
@@ -100,10 +102,7 @@ def run():
 
         outputtext = "No"
 
-    # Text = ("Total Mass of Iceberg: " + str("{:,}".format(IceBergVol)) + "kg" + "Mass of Ice above sea level: "
-    # + str("{:,}".format(IceSum)) + "kg" + "Move = " + str(move))
-
-    Text = tkinter.StringVar()
+    Text = tkinter.StringVar()  # Set up to display a text box on the GUI
 
     label = tkinter.Label(gui, textvariable=Text, background="White", foreground="Black", relief=RAISED, width=75,
                           height=10)
@@ -111,9 +110,9 @@ def run():
     Text.set("Total Mass of Iceberg: " + str("{:,}".format(IceBergVol)) + "kg" + '\n' "Mass of Ice above sea level: "
              + str("{:,}".format(IceSum)) + "kg" + '\n' "Able to be moved = " + outputtext)
 
-    label.pack()
+    label.pack() # Displays the text label
 
-    outputdata = ['1', IceSum, IceBergVol, Move]
+    outputdata = ['1', IceSum, IceBergVol, outputtext]  # Generates the output variable with iceberg number, above sea mass and total mass plus movability
 
     writer.writerow(outputdata)
 
