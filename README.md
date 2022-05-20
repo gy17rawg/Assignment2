@@ -44,9 +44,9 @@ Testing was conducted throughout using PyCharm CE's debugger, variable watcher a
 
 # KNOWN ISSUES/FURTHER DEVELOPMENT
 
--
--
--
+- The prgram can calculate the first iceberg of the multi iceberg file when using the debug but then errors appear and it cannot complete. The aim was to run each ice berg at a time, changing the values to 0 as it went so it can re read the data file
+- A future possibility would be to animate the moving of the ice berg
+- More complex animation could have a ship moving over the screen and the ice berg moved in the correct direction
 
 # WEBSITE
 
