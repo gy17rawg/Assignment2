@@ -2,7 +2,7 @@
 
 # BACKGROUND
 
-This assignment is designed to test the python knowledge developed through the course following on from the submission of our practical assessments. In this instance the program is designed to determine whether ice bergs are capable of being moved by a tug boat. The radar and lidar data are displayed on a canvas using
+This assignment is designed to test the python knowledge developed through the course following on from the submission of our practical assessments. In this instance the program is designed to determine whether ice bergs are capable of being moved by a tug boat. The radar and lidar data are displayed on a canvas using TKinter. The program is capable of processing the single iceberg file and multi iceberg file through separate programs.
 
 The criteria for the model are:
 
@@ -44,7 +44,8 @@ Testing was conducted throughout using PyCharm CE's debugger, variable watcher a
 
 # KNOWN ISSUES/FURTHER DEVELOPMENT
 
-- The prgram can calculate the first iceberg of the multi iceberg file when using the debug but then errors appear and it cannot complete. The aim was to run each ice berg at a time, changing the values to 0 as it went so it can re read the data file
+- Combine to process single or multi icebergs in one program
+- The program doesnt highlight icebergs that can be moved
 - A future possibility would be to animate the moving of the ice berg
 - More complex animation could have a ship moving over the screen and the ice berg moved in the correct direction
 
