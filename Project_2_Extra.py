@@ -101,13 +101,6 @@ def calciceberg(startx, data):  # Function to calculate each iceberg individuall
 
                     outputtext = "No"
 
-                # Save to file
-
-                header = ['Iceberg', 'Ice above Sea Level', 'Total Iceberg Mass', 'Tugability']
-                output = open('Output2.csv', 'w', newline='')
-                writer = csv.writer(output)
-                writer.writerow(header)
-
                 # Sets up text to be displayed
 
                 TextDisp = tkinter.StringVar()
@@ -125,11 +118,9 @@ def calciceberg(startx, data):  # Function to calculate each iceberg individuall
 
                 print("Results Displayed")
 
-                outputdata = [iceberg, IceSum, IceBergVol, outputtext]
+                # Save to list for saving to file
 
-                writer.writerow(outputdata)
-
-                output.close()
+                outputdata.append([iceberg, IceSum, IceBergVol, outputtext])
 
                 # Resets variables
 
@@ -332,5 +323,15 @@ matplotlib.pyplot.imshow(Lidar)
 matplotlib.pyplot.title("Lidar")
 
 matplotlib.pyplot.show()
+
+# Outputs to file
+
+header = ['Iceberg', 'Ice above Sea Level', 'Total Iceberg Mass', 'Tugability']
+output = open('Output_multi.csv', 'w', newline='')
+writer = csv.writer(output)
+writer.writerow(header)
+writer.writerows(outputdata)
+
+output.close()
 
 gui.mainloop()
