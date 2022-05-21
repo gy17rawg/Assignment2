@@ -83,7 +83,7 @@ def run():
 
                 icemasscalc(thickness)  # Calls the icemasscalc function passing in the thickness
 
-    for i in range(len(Ice)):
+    for i in range(len(Ice)):  # Sums ice mass of each pixel from list 'ice' using loop
         IceSum += Ice[i]
 
     # SeaLevelText = tkinter.Label(IceSum)
@@ -103,7 +103,10 @@ def run():
 
         outputtext = "No"
 
-    Text = tkinter.StringVar()  # Set up to display a text box on the GUI
+
+    # Sets up text to be displayed as a label
+
+    Text = tkinter.StringVar()  # Set up to display a text box on the GUI with text as a string variable
 
     label = tkinter.Label(gui, textvariable=Text, background="White", foreground="Black", relief=RAISED, width=75,
                           height=10)
