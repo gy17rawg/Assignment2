@@ -79,7 +79,7 @@ def run():
 
                 thickness = int((Lidar[y][x])) / 10  # Gets thickness in metres at that coordinate from the lidar
 
-                print(thickness)  # Prints the thickness value
+                # print(thickness)  # Prints the thickness value for testing
 
                 icemasscalc(thickness)  # Calls the icemasscalc function passing in the thickness
 
