@@ -3,6 +3,11 @@
 """
 Created on Wed Apr  6 14:20:45 2022
 
+'''This is the extra python file to run the program to calculate just multiple iceberg. It pulls files from the source
+folder and writes to an export file. It creates the GUI, calculates ice presence, thickness then the volume of the
+icebergs and displays on the GUI. The output file contains the iceberg number, total mass then mass above sea level.
+Version 1.0. MIT Licenced''
+
 @author: rorygrindey
 """
 
@@ -23,148 +28,197 @@ Move = False
 outputdata = []
 
 
-def icemasscalc(thickness):
-    mass = thickness * 1 * 900
+def icemasscalc(thickness):  # Function to calculate iceberg mass (Same as base project)
+
+    mass = thickness * 900
 
     Ice2.append(mass)
+
+
+def calciceberg(startx, data):  # Function to calculate each iceberg individually then makes them 'disappear'
+
+    global IceSum
+    global Ice2
+    elementnumber = 0
+    completeiceberg = False
+    global foundiceberg
+    global y
+    global x
+    global iceberg
+    global line
+
+    while completeiceberg is False:  # Ensures it runs until the entire iceberg is calculated
+
+        i = startx  # starting position is the left most element of the iceberg
+
+        # print("Line: " + str(y))
+
+        while int(data[i]) >= 100:  # Counts the width of the iceberg as long as the next element contains ice
+            elementnumber += 1
+            i += 1
+
+        # print(elementnumber)
+
+        if elementnumber > 0:  # Runs as long as there is an iceberg width
+
+            x = startx
+
+            for j in range(elementnumber):  # Loops through each element just of the iceberg
+                # print(x, y)
+
+                # print(Lidar[y][x])  # Does y then x as it retrieves by the array then the element position
+
+                thickness = int((Lidar[y][x])) / 10  # Gets thickness in metres at that coordinate
+
+                # print(thickness)
+                Radar[y][x] = 0
+
+                # Sets the value of ice at that point to 0, to ensure it isnt counted on the next run for other icebergs
+                # - ie makes it disappear
+
+                # print(Radar[y][x]) # To test that it is changing the element to 0
+
+                icemasscalc(thickness)
+
+                x += 1
+
+            if int(Lidar[y + 1][startx]) == 0:  # Checking if the next line is 0 (No more iceberg)
+
+                completeiceberg = True  # If the next line doesnt contain any ice, the ice berg is complete
+
+                for k in range(len(Ice2)):  # Sums ice mass of each pixel from list 'ice2' using loop
+                    IceSum += Ice2[k]
+
+                Ice2 = []  # Resets list of ice masses
+
+                IceBergVol = IceSum * 9  # Multiples by 9 to get total mass as only 10% above water
+
+                if IceBergVol < 36000000:  # Can only be towed if mass is less than 36m kg
+
+                    outputtext = "Yes"
+
+                else:
+
+                    outputtext = "No"
+
+                # Save to file
+
+                header = ['Iceberg', 'Ice above Sea Level', 'Total Iceberg Mass', 'Tugability']
+                output = open('Output2.csv', 'w', newline='')
+                writer = csv.writer(output)
+                writer.writerow(header)
+
+                # Sets up text to be displayed
+
+                TextDisp = tkinter.StringVar()
+
+                label = tkinter.Label(gui, textvariable=TextDisp, background="White", foreground="Black",
+                                      relief=RAISED, width=75,
+                                      height=5)
+
+                TextDisp.set(str(iceberg) + '\n'
+                                            "Total Mass of Iceberg: " + str(
+                    "{:,}".format(IceBergVol)) + "kg" + '\n' "Mass of Ice above sea level: "
+                             + str("{:,}".format(IceSum)) + "kg" + '\n' "Able to be moved = " + outputtext)
+
+                label.pack()
+
+                print("Results Displayed")
+
+                outputdata = [iceberg, IceSum, IceBergVol, outputtext]
+
+                writer.writerow(outputdata)
+
+                output.close()
+
+                # Resets variables
+
+                line = -1  # -1 as the function will finish and y+1 will occur so to start reading the radar file again,
+                # searching for more icebergs
+
+                startx = 0
+
+                foundiceberg = False
+
+                elementnumber = 0
+
+                x = 0
+
+            y += 1  # Adds 1 to the y variable to move to next line of the iceberg, as long as it isnt complete
 
 
 def run():
     print("Run Initiated")
 
-    global IceSum
+    global startx
     global IceBergVol
     global outputdata
-    elementnumber = 0
-    startx = 0
-    starty = 0
-    line = 0
-    iceberg = 0
+    global line
     global Ice2
-    foundiceberg = False
+    global foundiceberg
     i = 0
+    global iceberg
+    global x
+    global y
+    calccomplete = False
+
+    iceberg = 0
+
+    line = 0
+
+    foundiceberg = False
 
     print("Running")
 
     # print(Lidar[197][33])
 
-    while line <= len(Radar):  # First loop takes calls row individually
+    # This runs through the radar environment
+
+    while line < len(Radar):  # First loop takes calls row individually
 
         # print(Radar(r))
 
         # print(Radar[r])
 
-        data = Radar[line]
+        data = Radar[line]  # Data variable is filled with the radar data from the current line
+
+        i = 0
+
+        calccomplete = False
 
         y = line
 
-        print(line)
+        # print(line)  # Used for testing it reads the correct line
 
-        for i in range(len(data)):
+        while (calccomplete is False) & (i < len(data)):  # Loops through each element of the row
 
             x = i
 
-            if int(data[i]) >= 100 and foundiceberg is False:  # Second loop iterates through each element of the first list (row)
+            if int(data[i]) >= 100 and foundiceberg is False:  # If it hasnt found an iceberg and the data is ice:
 
-                iceberg += 1
+                iceberg += 1  # Adds one to iceberg count
 
                 print("Iceberg: " + str(iceberg))
 
-                startx = i  #Left most x position of iceberg
+                startx = i  # Left most x position of iceberg
 
-                foundiceberg = True # Set found iceberg to true
+                foundiceberg = True  # Set found iceberg to true
 
                 # print(x, y)
 
                 # print(Lidar[y][x])
 
-            if foundiceberg is True:  #If there is an iceberg already found
+            if foundiceberg is True:
+                # If there is an iceberg already found, call calculation function passing in starting x and the row of data
 
-                i = startx  #starting position is the left most element
+                calciceberg(startx, data)
 
-                print("Line" + str(y))
+                calccomplete = True  # Stops the loop and restarts looking for icebergs
 
-                while int(data[i + 1]) >= 100:
-                    elementnumber += 1
-                    i += 1
+            i += 1  # Moves to the next element
 
-                print(elementnumber)
+        line += 1  # Loops to next line
 
-                if elementnumber > 0:
-
-                    for j in range(elementnumber):
-                        # print(x, y)
-
-                        # print(Lidar[y][x])  # Does y then x as it retrieves by the array then the element position
-
-                        thickness = int((Lidar[y][x])) / 10  # Gets thickness in metres at that coordinate
-
-                        # print(thickness)
-                        Radar[y][x] = 0
-                        
-                        print(Radar[y][x])
-
-                        icemasscalc(thickness)
-
-                        x += 1
-
-                    if int(Lidar[y + 1][startx]) == 0:  # Checking if the next line is 0
-
-                        for k in range(len(Ice2)):
-                            IceSum += Ice2[k]
-
-                        Ice2 = []
-
-                        IceBergVol = IceSum * 10
-
-                        if IceBergVol < 36000000:
-                            move = True
-
-                        else:
-
-                            move = False
-
-                        # Save to file
-
-                        header = ['Iceberg', 'Ice above Sea Level', 'Total Iceberg Mass', 'Tugability']
-                        output = open('Output2.csv', 'w', newline='')
-                        writer = csv.writer(output)
-                        writer.writerow(header)
-
-                        TextDisp = tkinter.StringVar()
-
-                        label = tkinter.Label(gui, textvariable=TextDisp, background="White", foreground="Black",
-                                              relief=RAISED, width=75,
-                                              height=10)
-
-                        TextDisp.set(str(iceberg) + '\n'
-                                                    "Total Mass of Iceberg: " + str(
-                            "{:,}".format(IceBergVol)) + "kg" + '\n' "Mass of Ice above sea level: "
-                                     + str("{:,}".format(IceSum)) + "kg" + '\n' "Move = " + str(move))
-
-                        label.pack()
-
-                        print("Results Displayed")
-
-                        outputdata = [iceberg, IceSum, IceBergVol, Move]
-
-                        writer.writerow(outputdata)
-
-                        output.close()
-
-                        line = 0
-
-                        startx = 0
-
-                        foundiceberg = False
-
-                        elementnumber = 0
-
-                x = startx
-
-                y += 1
-
-        line += 1
 
     # SeaLevelText = tkinter.Label(IceSum)
     # "Mass of Ice above sea level: " + "{:,}".format(IceSum) + "kg")
@@ -187,6 +241,8 @@ def run():
 
 # Builds main menu window
 
+print("Building Menu")
+
 gui = tkinter.Tk()
 
 gui.wm_title("Model")
@@ -196,8 +252,6 @@ gui.config(background="White")
 gui.geometry("500x600")
 
 menu_bar = tkinter.Menu(gui)
-
-print("Building Menu")
 
 gui.config(menu=menu_bar)
 
